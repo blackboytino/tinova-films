@@ -2,55 +2,60 @@ import { SKILLS } from "@/data/site";
 
 export default function AboutSection() {
   return (
-    <section id="about" className="px-[8vw] py-[120px]" style={{ background: "var(--charcoal)" }}>
-      {/* Label */}
+    <section
+      id="about"
+      className="px-4 md:px-[8vw] py-16 md:py-[120px]"
+      style={{ background: "var(--charcoal)" }}
+    >
+      {/* LABEL */}
       <div
-        className="reveal flex items-center gap-3 mb-4"
+        className="flex items-center gap-3 mb-4"
         style={{
           fontFamily: "var(--font-head)",
-          fontSize: "0.7rem",
-          letterSpacing: "0.4em",
+          fontSize: "0.65rem",
+          letterSpacing: "0.35em",
           textTransform: "uppercase",
           color: "var(--orange)",
         }}
       >
-        <span className="block w-8 h-px" style={{ background: "var(--orange)" }} />
+        <span className="block w-6 md:w-8 h-px bg-[var(--orange)]" />
         Profile
       </div>
 
-      <div
-        className="grid gap-[80px] mt-15 items-center"
-        style={{ gridTemplateColumns: "1fr 1fr" }}
-      >
-        {/* Visual */}
-        <div className="reveal relative" style={{ maxWidth: 420 }}>
-          <div
-            className="relative w-full"
-            style={{ aspectRatio: "3/4" }}
-          >
-            {/* Placeholder frame */}
+      {/* MOBILE STACK / DESKTOP GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-[80px] items-start md:items-center mt-8">
+        {/* IMAGE */}
+        <div className="relative w-full max-w-[360px] md:max-w-[420px] mx-auto md:mx-0">
+          <div className="relative w-full" style={{ aspectRatio: "3/4" }}>
             <div
-              className="w-full h-full flex items-center justify-center relative overflow-hidden"
+              className="w-full h-full relative overflow-hidden"
               style={{ background: "var(--deep-gray)" }}
             >
               <img
+                src="https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618847/tinova_itrb1b.jpg"
+                alt="Tino Akpotu"
+                className="w-full h-full object-cover opacity-90"
+              />
 
-    src="https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618847/tinova_itrb1b.jpg"
-
-    alt="Tino Akpotu Logo"
-
-    className="w-full h-full object-cover opacity-90"
-
-  />
-
-  {/* Corner decorations */}
+              {/* Corner decorations */}
               <div className="about-corner tl" />
               <div className="about-corner br" />
             </div>
 
-            {/* Tag */}
+            {/* TAG (mobile repositioned) */}
             <div
-              className="absolute bottom-[-16px] right-[-16px] px-4 py-2 text-xs tracking-[0.15em] uppercase"
+              className="
+                absolute
+                -bottom-3
+                right-2
+                md:-bottom-4
+                md:-right-4
+                px-3 md:px-4
+                py-1.5 md:py-2
+                text-[10px] md:text-xs
+                tracking-[0.15em]
+                uppercase
+              "
               style={{
                 background: "var(--orange)",
                 color: "var(--black)",
@@ -63,67 +68,62 @@ export default function AboutSection() {
           </div>
         </div>
 
-        {/* Text */}
-        <div>
+        {/* TEXT */}
+        <div className="text-center md:text-left">
           <h2
-            className="reveal"
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "clamp(2.5rem, 5vw, 5rem)",
+              fontSize: "clamp(2rem,6vw,5rem)",
               lineHeight: 0.95,
-              letterSpacing: "0.02em",
               color: "var(--cream)",
-              marginBottom: 20,
+              marginBottom: 16,
             }}
           >
-            ABSOLUTE 
-           
-            <span style={{ color: "var(--orange)" }}> CINEMA</span>
+            ABSOLUTE <span style={{ color: "var(--orange)" }}>CINEMA</span>
           </h2>
 
           <p
-            className="reveal"
             style={{
               color: "var(--off-white)",
-              fontSize: "1rem",
-              lineHeight: 1.8,
-              fontWeight: 300,
-              marginBottom: 16,
-              maxWidth: 480,
+              fontSize: "0.95rem",
+              lineHeight: 1.7,
+              marginBottom: 14,
+              maxWidth: 520,
+              marginInline: "auto",
             }}
           >
             I&apos;m Tino Akpotu, an all-round video specialist with a passion for creative
-            visual storytelling. From the raw energy of live events to the quiet intensity
-            of cinematic narratives, I craft visuals that don&apos;t just show a moment,
-            they make you feel it.
+            visual storytelling. From live events to cinematic narratives, I craft visuals
+            that make you feel the moment.
           </p>
 
           <p
-            className="reveal"
             style={{
               color: "var(--off-white)",
-              fontSize: "1rem",
-              lineHeight: 1.8,
-              fontWeight: 300,
-              marginBottom: 32,
-              maxWidth: 480,
+              fontSize: "0.95rem",
+              lineHeight: 1.7,
+              marginBottom: 26,
+              maxWidth: 520,
+              marginInline: "auto",
+              opacity: 0.9,
             }}
           >
-            With deep roots in nightlife culture, live events, and digital content, I bring
-            a unique lens that blends technical precision with artistic instinct.
+            With deep roots in nightlife culture and digital content, I blend technical
+            precision with artistic instinct.
           </p>
 
-          {/* Skills */}
-          <div className="reveal flex flex-wrap gap-2 mb-10">
+          {/* SKILLS (mobile scroll feel) */}
+          <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-8">
             {SKILLS.map((skill) => (
               <span
                 key={skill}
-                className="px-3 py-1 text-xs tracking-[0.1em] uppercase border rounded-[2px]"
+                className="px-2.5 py-1 text-[10px] md:text-xs uppercase border"
                 style={{
                   fontFamily: "var(--font-head)",
                   color: "var(--off-white)",
                   borderColor: "rgba(255,255,255,0.1)",
                   background: "rgba(255,255,255,0.03)",
+                  letterSpacing: "0.08em",
                 }}
               >
                 {skill}
@@ -131,12 +131,13 @@ export default function AboutSection() {
             ))}
           </div>
 
+          {/* CTA */}
           <a
             href="#contact"
-            className="reveal inline-block btn-primary-shimmer relative overflow-hidden bg-[var(--orange)] text-[var(--black)] px-9 py-[14px] rounded-[2px] no-underline transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_var(--orange-soft)] cursor-none"
+            className="inline-block bg-[var(--orange)] text-[var(--black)] px-7 py-3 md:px-9 md:py-[14px] no-underline transition-all duration-300 hover:scale-105"
             style={{
               fontFamily: "var(--font-head)",
-              fontSize: "0.85rem",
+              fontSize: "0.8rem",
               fontWeight: 700,
               letterSpacing: "0.12em",
               textTransform: "uppercase",

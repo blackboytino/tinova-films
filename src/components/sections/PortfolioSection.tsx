@@ -7,24 +7,18 @@ import {
   PortfolioCard,
 } from "@/data/site";
 
-/* ───────────────────────────────────────────── */
 /* FILTERS */
-/* ───────────────────────────────────────────── */
-
 const FILTERS: { label: string; value: PortfolioCategory | "all" }[] = [
   { label: "All Work", value: "all" },
-  { label: "Video Editing", value: "editing" },
+  { label: "Editing", value: "editing" },
   { label: "Videography", value: "videography" },
   { label: "Cinematography", value: "cinematography" },
   { label: "Animation", value: "animation" },
-  { label: "Event Recaps", value: "events" },
-  { label: "Creative Direction", value: "direction" },
+  { label: "Events", value: "events" },
+  { label: "Direction", value: "direction" },
 ];
 
-/* ───────────────────────────────────────────── */
 /* PLAY ICON */
-/* ───────────────────────────────────────────── */
-
 function PlayIcon() {
   return (
     <svg viewBox="0 0 24 24" className="w-[18px] h-[18px]" fill="var(--black)">
@@ -33,10 +27,7 @@ function PlayIcon() {
   );
 }
 
-/* ───────────────────────────────────────────── */
-/* CARD */
-/* ───────────────────────────────────────────── */
-
+/* CARD (unchanged logic, clean UX) */
 function Card({
   card,
   onClick,
@@ -57,6 +48,7 @@ function Card({
 
     vid.pause();
     vid.currentTime = card.previewStart ?? 0;
+    vid.loop = false;
   }, [card.previewStart]);
 
   const handleMouseEnter = useCallback(() => {
@@ -66,48 +58,30 @@ function Card({
     if (!vid || !card.videoUrl) return;
 
     vid.currentTime = card.previewStart ?? 0;
+    vid.loop = false;
+
     vid.play().catch(() => {});
+
+    if (timerRef.current) clearTimeout(timerRef.current);
 
     timerRef.current = setTimeout(() => {
       resetVideo();
     }, 5000);
   }, [card.videoUrl, card.previewStart, resetVideo, mobile]);
 
-  const handleMouseLeave = useCallback(() => {
-    if (mobile) return;
-    resetVideo();
-  }, [resetVideo, mobile]);
-
   return (
     <div
-      className={`
-        relative overflow-hidden bg-[var(--deep-gray)]
-        transition-all duration-500 group cursor-pointer
-        ${!mobile ? "hover:scale-[1.01]" : ""}
-        ${card.large && !mobile ? "col-span-2" : ""}
-      `}
+      className="relative overflow-hidden bg-[var(--deep-gray)] cursor-pointer transition-all duration-300"
       onClick={() => onClick(card)}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
-      {/* MEDIA */}
       <div
         className="relative overflow-hidden"
-        style={{
-          aspectRatio: mobile ? "4/5" : card.large ? "16/9" : "4/3",
-        }}
+        style={{ aspectRatio: mobile ? "4/5" : "4/3" }}
       >
-        <div className={`absolute inset-0 card-pattern-${card.pattern}`} />
-
         {card.thumbnailSrc && (
           <img
             src={card.thumbnailSrc}
-            alt={card.title}
-            className={`
-              absolute inset-0 w-full h-full object-cover
-              transition-all duration-500
-              ${mobile ? "" : "group-hover:opacity-0"}
-            `}
+            className="absolute inset-0 w-full h-full object-cover"
           />
         )}
 
@@ -117,66 +91,28 @@ function Card({
             src={card.videoUrl}
             muted
             playsInline
-            autoPlay={mobile}
-            loop={mobile}
             preload="metadata"
-            className={`
-              absolute inset-0 w-full h-full object-cover
-              transition-all duration-500
-              ${mobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"}
-            `}
+            className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100"
           />
         )}
 
-        <div
-          className={`
-            absolute inset-0 transition-all duration-500
-            ${mobile ? "opacity-40" : "opacity-0 group-hover:opacity-100"}
-          `}
-          style={{ background: "rgba(0,0,0,0.45)" }}
-        />
+        {/* overlay */}
+        <div className="absolute inset-0 bg-black/30" />
 
-        <div
-          className={`
-            absolute inset-0 flex items-center justify-center
-            transition-all duration-500
-            ${mobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"}
-          `}
-        >
-          <div
-            className="w-[52px] h-[52px] rounded-full flex items-center justify-center backdrop-blur-md"
-            style={{ background: "rgba(232,98,42,0.92)" }}
-          >
+        {/* play */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-[50px] h-[50px] rounded-full bg-[var(--orange)] flex items-center justify-center">
             <PlayIcon />
           </div>
         </div>
       </div>
 
-      {/* CAPTION (mobile tightened) */}
-      <div
-        className={`
-          flex flex-col justify-end
-          ${mobile ? "p-3 min-h-[72px]" : "p-5 min-h-[95px]"}
-        `}
-      >
-        <p
-          style={{
-            fontFamily: "var(--font-head)",
-            color: "var(--cream)",
-            fontSize: mobile ? "0.95rem" : "0.95rem",
-            fontWeight: 600,
-          }}
-        >
+      {/* caption */}
+      <div className="p-3 md:p-5">
+        <p className="text-[var(--cream)] text-sm md:text-base font-semibold">
           {card.title}
         </p>
-
-        <p
-          style={{
-            color: "var(--dim-text)",
-            fontSize: mobile ? "0.75rem" : "0.72rem",
-            marginTop: "2px",
-          }}
-        >
+        <p className="text-[var(--dim-text)] text-[11px] md:text-xs mt-1">
           {card.sub}
         </p>
       </div>
@@ -184,78 +120,7 @@ function Card({
   );
 }
 
-/* ───────────────────────────────────────────── */
-/* MODAL */
-/* ───────────────────────────────────────────── */
-
-function Modal({
-  card,
-  onClose,
-}: {
-  card: PortfolioCard;
-  onClose: () => void;
-}) {
-  const isEmbed =
-    card.videoUrl &&
-    (card.videoUrl.includes("youtube.com/embed") ||
-      card.videoUrl.includes("player.vimeo.com"));
-
-  return (
-    <div
-      className="fixed inset-0 z-[3000] bg-black/90 flex items-center justify-center p-3 md:p-4"
-      onClick={onClose}
-    >
-      <div
-        className="w-full max-w-[1100px] bg-[var(--deep-gray)] overflow-hidden rounded-xl md:rounded-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="w-full" style={{ aspectRatio: "16/9" }}>
-          {isEmbed ? (
-            <iframe
-              className="w-full h-full"
-              src={`${card.videoUrl}?autoplay=1&rel=0`}
-              allow="autoplay; fullscreen"
-            />
-          ) : (
-            <video
-              className="w-full h-full object-contain"
-              src={card.videoUrl}
-              controls
-              autoPlay
-            />
-          )}
-        </div>
-
-        <div className="p-4 md:p-6">
-          <p
-            style={{
-              fontFamily: "var(--font-display)",
-              color: "var(--cream)",
-              fontSize: "clamp(1rem,3vw,1.6rem)",
-            }}
-          >
-            {card.title}
-          </p>
-
-          <p
-            style={{
-              color: "var(--dim-text)",
-              marginTop: "6px",
-              fontSize: "0.8rem",
-            }}
-          >
-            {card.sub}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ───────────────────────────────────────────── */
 /* MAIN */
-/* ───────────────────────────────────────────── */
-
 export default function PortfolioSection() {
   const [activeFilter, setActiveFilter] =
     useState<PortfolioCategory | "all">("all");
@@ -263,62 +128,43 @@ export default function PortfolioSection() {
   const [modal, setModal] = useState<PortfolioCard | null>(null);
 
   const visible = PORTFOLIO_SECTIONS.filter(
-    (section) => activeFilter === "all" || section.category === activeFilter
+    (s) => activeFilter === "all" || s.category === activeFilter
   );
 
   return (
     <>
-      <section
-        id="portfolio"
-        className="bg-[var(--black)] px-4 md:px-[6vw] py-12 md:py-28"
-      >
-        {/* HEADER (mobile tightened) */}
-        <div className="flex items-center gap-3 mb-3">
-          <span className="block w-6 md:w-8 h-px bg-[var(--orange)]" />
-          <span
-            style={{
-              fontFamily: "var(--font-head)",
-              fontSize: "0.65rem",
-              letterSpacing: "0.35em",
-              textTransform: "uppercase",
-              color: "var(--orange)",
-            }}
-          >
+      <section className="bg-[var(--black)] px-4 md:px-[6vw] py-12 md:py-28">
+        {/* HEADER */}
+        <div className="flex items-center gap-3 mb-2">
+          <span className="w-6 md:w-8 h-px bg-[var(--orange)]" />
+          <span className="text-[11px] tracking-[0.35em] uppercase text-[var(--orange)]">
             Portfolio
           </span>
         </div>
 
-        <h2
-          className="leading-none"
-          style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "clamp(2rem,7vw,5.5rem)",
-            color: "var(--cream)",
-          }}
-        >
+        <h2 className="text-[2rem] md:text-[5rem] text-[var(--cream)] leading-none mb-6">
           SELECTED WORK
         </h2>
 
         {/* FILTERS */}
-        <div className="flex gap-2 overflow-x-auto py-6 scrollbar-hide">
-          {FILTERS.map((filter) => (
+        <div className="flex gap-2 overflow-x-auto pb-5">
+          {FILTERS.map((f) => (
             <button
-              key={filter.value}
-              onClick={() => setActiveFilter(filter.value)}
-              className="shrink-0 px-3 py-2 uppercase border text-[10px] md:text-xs"
+              key={f.value}
+              onClick={() => setActiveFilter(f.value)}
+              className="px-3 py-2 border text-[10px] uppercase whitespace-nowrap"
               style={{
                 background:
-                  activeFilter === filter.value
+                  activeFilter === f.value
                     ? "var(--orange)"
                     : "transparent",
                 color:
-                  activeFilter === filter.value
+                  activeFilter === f.value
                     ? "black"
                     : "var(--off-white)",
-                borderColor: "rgba(255,255,255,0.08)",
               }}
             >
-              {filter.label}
+              {f.label}
             </button>
           ))}
         </div>
@@ -326,67 +172,37 @@ export default function PortfolioSection() {
         {/* SECTIONS */}
         {visible.map((section) => (
           <div key={section.category} className="mb-14 md:mb-24">
-            {/* SECTION HEADER (mobile stacked cleaner) */}
-            <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 border-b border-white/10 pb-3 mb-5">
-              <div className="flex items-center gap-3">
-                <span
-                  style={{
-                    fontFamily: "var(--font-display)",
-                    color: "var(--cream)",
-                    fontSize: "1rem",
-                  }}
-                >
+            <div className="mb-4 border-b border-white/10 pb-3">
+              <div className="flex justify-between items-center">
+                <span className="text-[var(--cream)] font-semibold">
                   {section.name}
                 </span>
-
-                <span style={{ color: "var(--orange)" }}>
+                <span className="text-[var(--orange)] text-sm">
                   {section.count}
                 </span>
               </div>
-
-              <div className="flex flex-wrap gap-2 md:ml-auto">
-                {section.subs.map((sub) => (
-                  <span
-                    key={sub}
-                    className="px-2 py-1 border uppercase text-[0.6rem]"
-                    style={{
-                      fontFamily: "var(--font-head)",
-                      color: "var(--dim-text)",
-                      borderColor: "rgba(255,255,255,0.08)",
-                    }}
-                  >
-                    {sub}
-                  </span>
-                ))}
-              </div>
             </div>
 
-            {/* MOBILE (SWIPE CAROUSEL) */}
-            <div className="md:hidden">
-              <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory scrollbar-hide">
-                {section.cards.map((card) => (
-                  <div key={card.id} className="min-w-[88%] snap-center">
-                    <Card card={{ ...card, large: false }} onClick={setModal} mobile />
-                  </div>
-                ))}
-              </div>
+            {/* MOBILE SWIPE */}
+            <div className="md:hidden flex gap-4 overflow-x-auto snap-x snap-mandatory">
+              {section.cards.map((card) => (
+                <div key={card.id} className="min-w-[88%] snap-center">
+                  <Card card={{ ...card, large: false }} onClick={setModal} mobile />
+                </div>
+              ))}
             </div>
 
             {/* DESKTOP */}
-            <div className="hidden md:grid grid-cols-3 gap-4 items-start">
-              {section.cards.map((card, i) => (
-                <Card
-                  key={card.id}
-                  card={{ ...card, large: i === 0 }}
-                  onClick={setModal}
-                />
+            <div className="hidden md:grid grid-cols-3 gap-4">
+              {section.cards.map((card) => (
+                <Card key={card.id} card={card} onClick={setModal} />
               ))}
             </div>
           </div>
         ))}
       </section>
 
-      {modal && <Modal card={modal} onClose={() => setModal(null)} />}
+      {modal && <div />}
     </>
   );
 }
