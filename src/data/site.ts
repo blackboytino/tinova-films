@@ -70,7 +70,7 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
     cards: [
         {
       id: "vg-3", title: "Product Showcase", sub: "Full day", pattern: 6,videoUrl: "/assets/Bubus.mov",
-        thumbnailSrc: "/assets/bubu thumbnail.png",
+        thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618763/bubu_thumbnail_bo98bl.png",
         previewStart: 1  
   }
     ],
@@ -86,8 +86,8 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
         title: "NYSC Carnival",
         sub: "Single Cam",
         pattern: 4,
-        videoUrl: "/assets/NYSC Cultural Carnival.mov",
-        thumbnailSrc: "/assets/carnival thumbnail.png",
+        videoUrl: "https://res.cloudinary.com/dhbt8jcpg/video/upload/v1778620230/NYSC_Cultural_Carnival_h3jiai.mov",
+        thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618824/carnival_thumbnail_g9oy9r.png",
         previewStart: 14,
       },
       {
@@ -96,8 +96,8 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
         sub: "Documentary style",
         large: true,
         pattern: 3,
-        videoUrl: "/assets/NYSC Camp Recap.mov",
-        thumbnailSrc: "/assets/Parade thumbnail.png",
+        videoUrl: "https://res.cloudinary.com/dhbt8jcpg/video/upload/v1778620671/NYSC_Camp_Recap_tn1zh4.mov",
+        thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618860/Parade_thumbnail_ugzkhn.png",
         previewStart: 14,
       },
     ],
@@ -116,7 +116,7 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
         large: true,
         pattern: 1,
          videoUrl: "/assets/Ctrl Z .mov",
-        thumbnailSrc: "/assets/Z thumbnail.png",
+        thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618867/z_thumbnail_sqo4ch.png",
         previewStart: 1,
       },
     ],
@@ -128,7 +128,7 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
     subs: ["Motion Graphics", "Data Viz", "Explainer", "Brand"],
     cards: [
       { id: "anim-1", title: "Finance Timeline", sub: "2D motion", large: true, pattern: 4, videoUrl: "/assets/Innovation.mp4",
-        thumbnailSrc: "/assets/fin thumbnail.jpg",
+        thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618772/fin_thumbnail_zxb9kc.jpg",
         previewStart: 52 },
     ],
   },
@@ -145,8 +145,8 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
         featured: true,
         large: true,
         pattern: 1,
-         videoUrl: "/assets/pm2am.mov",
-        thumbnailSrc: "/assets/pm thumbnail.jpg",
+         videoUrl: "https://res.cloudinary.com/dhbt8jcpg/video/upload/v1778624970/pm2am-compressed-compressed_mckzcn.mov",
+        thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618845/pm_thumbnail_m11fop.jpg",
         previewStart: 5,
       },
       { id: "ev-2", title: "DJ Performance Recap", sub: "Energetic", pattern: 2 },
@@ -159,7 +159,7 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
     subs: ["Concept", "Art Direction", "Styling", "Campaign"],
     cards: [
       { id: "dir-1", title: "Ctrl Z", sub: "Full concept-to-screen", large: true, pattern: 4, videoUrl: "/assets/Ctrl Z .mov",
-        thumbnailSrc: "/assets/z thumbnail.png",
+        thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618867/z_thumbnail_sqo4ch.png",
         previewStart: 1, },
     ],
   },

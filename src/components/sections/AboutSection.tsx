@@ -35,7 +35,7 @@ export default function AboutSection() {
             >
               <img
 
-    src="/assets/tinova.JPG"
+    src="https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618847/tinova_itrb1b.jpg"
 
     alt="Tino Akpotu Logo"
 
