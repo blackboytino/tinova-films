@@ -1,0 +1,336 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --black:       #080a0c;
+  --charcoal:    #111418;
+  --deep-gray:   #1a1e24;
+  --mid-gray:    #252b34;
+  --muted-blue:  #1c2a3a;
+  --steel:       #2e3d4f;
+  --orange:      #e8622a;
+  --orange-glow: rgba(232, 98, 42, 0.15);
+  --orange-soft: rgba(232, 98, 42, 0.4);
+  --neon-blue:   #4fc3f7;
+  --neon-glow:   rgba(79, 195, 247, 0.12);
+  --cream:       #f0ece6;
+  --off-white:   #b8b0a6;
+  --dim-text:    #6b7280;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-head:    'Syne', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.83, 0, 0.17, 1);
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  background: var(--black);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+::selection {
+  background: var(--orange);
+  color: var(--black);
+}
+
+/* ── Cursor ── */
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  mix-blend-mode: difference;
+}
+
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--cream);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s, opacity 0.2s;
+  position: absolute;
+}
+
+.cursor-ring {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(240, 236, 230, 0.5);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.18s var(--ease-out), width 0.3s, height 0.3s, opacity 0.2s, border-color 0.3s;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.cursor-expand .cursor-ring {
+  width: 60px;
+  height: 60px;
+  border-color: var(--orange);
+}
+
+/* ── Scroll Progress ── */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  z-index: 1000;
+  background: var(--orange);
+  transform-origin: left;
+  transform: scaleX(0);
+  box-shadow: 0 0 8px var(--orange-soft);
+  transition: transform 0.05s;
+  width: 100%;
+}
+
+/* ── Orbs ── */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(80px);
+  opacity: 0.3;
+}
+
+/* ── Loader ── */
+.loader-name span {
+  display: inline-block;
+  transform: translateY(100%);
+  animation: slideUp 0.8s var(--ease-out) forwards;
+}
+
+@keyframes slideUp {
+  to { transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes loadBar {
+  to { width: 100%; }
+}
+
+/* ── Marquee ── */
+@keyframes marqueeScroll {
+  to { transform: translateX(-50%); }
+}
+
+/* ── Orb float ── */
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0); }
+  33%       { transform: translate(20px, -30px); }
+  66%       { transform: translate(-15px, 20px); }
+}
+
+/* ── Reel ring ── */
+@keyframes rotateSlow {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Scroll hint ── */
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50%       { opacity: 1;   transform: scaleY(1.15); }
+}
+
+/* ── Counter ── */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Nav ── */
+.nav-link-item {
+  position: relative;
+  color: var(--off-white);
+  text-decoration: none;
+  font-family: var(--font-head);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+
+.nav-link-item::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--orange);
+  transition: width 0.3s var(--ease-out);
+}
+
+.nav-link-item:hover {
+  color: var(--cream);
+}
+
+.nav-link-item:hover::after {
+  width: 100%;
+}
+
+/* ── Section reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Hero loaded state ── */
+.loaded .hero-eyebrow,
+.loaded .hero-title,
+.loaded .hero-sub,
+.loaded .hero-actions,
+.loaded .hero-stats {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Portfolio card patterns ── */
+.card-pattern-1 { background: linear-gradient(135deg, #1a2535 0%, #e8622a 100%); opacity: 0.7; }
+.card-pattern-2 { background: linear-gradient(135deg, #251a10 0%, #1a1e24 100%); }
+.card-pattern-3 { background: linear-gradient(135deg, #0e1929 0%, #1c2030 100%); }
+.card-pattern-4 { background: linear-gradient(135deg, #201510 0%, #2d1808 100%); }
+.card-pattern-5 { background: linear-gradient(135deg, #142030 0%, #0a0f18 100%); }
+.card-pattern-6 { background: linear-gradient(135deg, #1a1818 0%, #0c1015 100%); }
+
+/* ── Grid item colors ── */
+.gi-1  { background: linear-gradient(135deg, #1a2535, #0e1929); }
+.gi-2  { background: linear-gradient(135deg, #251a10, #1a1e24); }
+.gi-3  { background: linear-gradient(135deg, #0e1929, #1c2030); }
+.gi-4  { background: linear-gradient(135deg, #201510, #2d1808); }
+.gi-5  { background: linear-gradient(135deg, #142030, #0a0f18); }
+.gi-6  { background: linear-gradient(135deg, #1a1818, #0c1015); }
+.gi-7  { background: linear-gradient(135deg, #1e2830, #102030); }
+.gi-8  { background: linear-gradient(135deg, #281a10, #1a1418); }
+.gi-9  { background: linear-gradient(135deg, #0e1520, #182535); }
+.gi-10 { background: linear-gradient(135deg, #202828, #0a1015); }
+
+/* ── Hero grid lines ── */
+.hero-grid-lines {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
+}
+
+/* ── Btn shimmer ── */
+.btn-primary-shimmer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(-100%) skewX(-15deg);
+  transition: transform 0.5s var(--ease-out);
+}
+
+.btn-primary-shimmer:hover::before {
+  transform: translateX(120%) skewX(-15deg);
+}
+
+/* ── About corner decorations ── */
+.about-corner {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-color: var(--orange);
+  border-style: solid;
+}
+
+.about-corner.tl {
+  top: -8px;
+  left: -8px;
+  border-width: 2px 0 0 2px;
+}
+
+.about-corner.br {
+  bottom: -8px;
+  right: -8px;
+  border-width: 0 2px 2px 0;
+}
+
+/* ── Service card top bar ── */
+.service-card-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--orange);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-out);
+}
+
+.service-card-bar:hover::before {
+  transform: scaleX(1);
+}
+
+/* ── Portfolio card featured border ── */
+.card-featured::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid rgba(232, 98, 42, 0.3);
+  pointer-events: none;
+}
+
+/* ── Form inputs ── */
+.form-input-custom {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--deep-gray);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  border-radius: 2px;
+  transition: border-color 0.3s, background 0.3s;
+  outline: none;
+}
+
+.form-input-custom:focus {
+  border-color: var(--orange);
+  background: var(--mid-gray);
+}
+
+.form-input-custom::placeholder {
+  color: var(--dim-text);
+}
+
+/* ── Mobile nav ── */
+@media (max-width: 768px) {
+  body { cursor: auto; }
+  .cursor { display: none; }
+}
