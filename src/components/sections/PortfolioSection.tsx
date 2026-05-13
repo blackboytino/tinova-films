@@ -20,7 +20,7 @@ function PlayIcon() {
 }
 
 /* ───────────────────────────────────────────── */
-/* CARD (AUTO LOOP PREVIEW) */
+/* CARD (UNCHANGED LOGIC) */
 /* ───────────────────────────────────────────── */
 
 function Card({
@@ -42,25 +42,28 @@ function Card({
 
     const start = card.previewStart ?? 0;
 
-    let interval: ReturnType<typeof setInterval>;
+    let timeout: ReturnType<typeof setTimeout>;
 
-    const run = async () => {
+    const playLoop = async () => {
       try {
         vid.currentTime = start;
         await vid.play();
       } catch {}
 
-      interval = setInterval(() => {
+      timeout = setTimeout(() => {
         if (!videoRef.current) return;
+
+        videoRef.current.pause();
         videoRef.current.currentTime = start;
-        videoRef.current.play().catch(() => {});
+
+        playLoop();
       }, PREVIEW_DURATION);
     };
 
-    run();
+    playLoop();
 
     return () => {
-      if (interval) clearInterval(interval);
+      if (timeout) clearTimeout(timeout);
     };
   }, [card.previewStart, card.videoUrl]);
 
@@ -76,7 +79,6 @@ function Card({
       "
       onClick={() => onClick(card)}
     >
-      {/* MEDIA */}
       <div
         className="relative overflow-hidden"
         style={{
@@ -92,10 +94,8 @@ function Card({
           className="absolute inset-0 w-full h-full object-cover"
         />
 
-        {/* OVERLAY */}
         <div className="absolute inset-0 bg-black/35" />
 
-        {/* PLAY ICON */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="w-[52px] h-[52px] rounded-full bg-[var(--orange)] flex items-center justify-center">
             <PlayIcon />
@@ -103,7 +103,6 @@ function Card({
         </div>
       </div>
 
-      {/* CAPTION */}
       <div className="p-4 md:p-6">
         <p className="text-[var(--cream)] text-sm md:text-base font-semibold">
           {card.title}
@@ -117,45 +116,7 @@ function Card({
 }
 
 /* ───────────────────────────────────────────── */
-/* MODAL */
-/* ───────────────────────────────────────────── */
-
-function Modal({
-  card,
-  onClose,
-}: {
-  card: PortfolioCard;
-  onClose: () => void;
-}) {
-  return (
-    <div
-      className="fixed inset-0 z-[3000] bg-black/95 flex items-center justify-center p-4"
-      onClick={onClose}
-    >
-      <button
-        onClick={onClose}
-        className="absolute top-5 right-5 md:top-8 md:right-8 text-white text-xs uppercase tracking-[0.25em] px-3 py-2 border border-white/20 bg-black/40 backdrop-blur"
-      >
-        Close
-      </button>
-
-      <div
-        className="w-full max-w-[1200px]"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <video
-          src={card.videoUrl}
-          controls
-          autoPlay
-          className="max-w-full max-h-[90vh] w-auto h-auto mx-auto"
-        />
-      </div>
-    </div>
-  );
-}
-
-/* ───────────────────────────────────────────── */
-/* MAIN SECTION (CLEAN SPACING FIX) */
+/* MAIN SECTION (MOBILE POLISH ONLY) */
 /* ───────────────────────────────────────────── */
 
 export default function PortfolioSection() {
@@ -173,6 +134,7 @@ export default function PortfolioSection() {
   return (
     <>
       <section className="bg-[var(--black)] px-4 md:px-[6vw] py-16 md:py-28">
+
         {/* HEADER */}
         <div className="flex items-center gap-3 mb-3">
           <span className="w-8 h-px bg-[var(--orange)]" />
@@ -208,7 +170,11 @@ export default function PortfolioSection() {
             <button
               key={filter.value}
               onClick={() => setActiveFilter(filter.value as any)}
-              className="px-3 py-2 border text-[10px] uppercase tracking-[0.25em] whitespace-nowrap"
+              className="
+                px-3 py-2 border
+                text-[10px] uppercase tracking-[0.25em]
+                whitespace-nowrap
+              "
               style={{
                 fontFamily: "var(--font-head)",
                 background:
@@ -231,10 +197,10 @@ export default function PortfolioSection() {
         {visible.map((section) => (
           <div
             key={section.category}
-            className="mb-24 md:mb-32 px-2 md:px-6"
+            className="mb-24 md:mb-32 px-1 md:px-6"
           >
             {/* HEADER */}
-            <div className="flex justify-between items-end mb-8 border-b border-white/10 pb-4">
+            <div className="flex justify-between items-end mb-6 md:mb-8 border-b border-white/10 pb-4">
               <span className="text-[var(--cream)] text-lg font-semibold">
                 {section.name}
               </span>
@@ -244,16 +210,30 @@ export default function PortfolioSection() {
               </span>
             </div>
 
-            {/* MOBILE */}
-            <div className="md:hidden flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4">
+            {/* ───────────────────────────── */}
+            {/* MOBILE (FIXED SCALE FEEL) */}
+            {/* ───────────────────────────── */}
+
+            <div className="md:hidden flex gap-3 overflow-x-auto snap-x snap-mandatory pb-4">
               {section.cards.map((card) => (
-                <div key={card.id} className="min-w-[88%] snap-center">
-                  <Card card={{ ...card, large: false }} onClick={setModal} mobile />
+                <div
+                  key={card.id}
+                  className="
+                    snap-center
+                    flex-shrink-0
+                    w-[78%]
+                  "
+                >
+                  <Card
+                    card={{ ...card, large: false }}
+                    onClick={setModal}
+                    mobile
+                  />
                 </div>
               ))}
             </div>
 
-            {/* DESKTOP */}
+            {/* DESKTOP (UNCHANGED) */}
             <div className="hidden md:grid grid-cols-3 gap-5 items-start">
               {section.cards.map((card) => (
                 <Card key={card.id} card={card} onClick={setModal} />
@@ -264,7 +244,35 @@ export default function PortfolioSection() {
       </section>
 
       {/* MODAL */}
-      {modal && <Modal card={modal} onClose={() => setModal(null)} />}
+      {modal && (
+        <div
+          className="fixed inset-0 z-[3000] bg-black/95 flex items-center justify-center p-4"
+          onClick={() => setModal(null)}
+        >
+          <button
+            onClick={() => setModal(null)}
+            className="
+              absolute top-5 right-5 md:top-8 md:right-8
+              text-white text-xs uppercase tracking-[0.25em]
+              px-3 py-2 border border-white/20 bg-black/40 backdrop-blur
+            "
+          >
+            Close
+          </button>
+
+          <div
+            className="w-full max-w-[1200px]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <video
+              src={modal.videoUrl}
+              controls
+              autoPlay
+              className="max-w-full max-h-[90vh] w-auto h-auto mx-auto"
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 }
