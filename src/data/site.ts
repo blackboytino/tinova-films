@@ -115,7 +115,7 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
         featured: true,
         large: true,
         pattern: 1,
-         videoUrl: "/assets/Ctrl Z .mov",
+         videoUrl: "https://res.cloudinary.com/dhbt8jcpg/video/upload/v1778628715/Ctrl_Z_-final_rxmcwa.mov",
         thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618867/z_thumbnail_sqo4ch.png",
         previewStart: 1,
       },
@@ -158,7 +158,7 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
     count: "06",
     subs: ["Concept", "Art Direction", "Styling", "Campaign"],
     cards: [
-      { id: "dir-1", title: "Ctrl Z", sub: "Full concept-to-screen", large: true, pattern: 4, videoUrl: "/assets/Ctrl Z .mov",
+      { id: "dir-1", title: "Ctrl Z", sub: "Full concept-to-screen", large: true, pattern: 4, videoUrl: "https://res.cloudinary.com/dhbt8jcpg/video/upload/v1778628715/Ctrl_Z_-final_rxmcwa.mov",
         thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618867/z_thumbnail_sqo4ch.png",
         previewStart: 1, },
     ],

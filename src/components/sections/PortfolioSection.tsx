@@ -7,18 +7,10 @@ import {
   PortfolioCard,
 } from "@/data/site";
 
-/* FILTERS */
-const FILTERS: { label: string; value: PortfolioCategory | "all" }[] = [
-  { label: "All Work", value: "all" },
-  { label: "Editing", value: "editing" },
-  { label: "Videography", value: "videography" },
-  { label: "Cinematography", value: "cinematography" },
-  { label: "Animation", value: "animation" },
-  { label: "Events", value: "events" },
-  { label: "Direction", value: "direction" },
-];
-
+/* ───────────────────────────────────────────── */
 /* PLAY ICON */
+/* ───────────────────────────────────────────── */
+
 function PlayIcon() {
   return (
     <svg viewBox="0 0 24 24" className="w-[18px] h-[18px]" fill="var(--black)">
@@ -27,7 +19,10 @@ function PlayIcon() {
   );
 }
 
-/* CARD (unchanged logic, clean UX) */
+/* ───────────────────────────────────────────── */
+/* CARD (UNCHANGED LOGIC) */
+/* ───────────────────────────────────────────── */
+
 function Card({
   card,
   onClick,
@@ -48,7 +43,6 @@ function Card({
 
     vid.pause();
     vid.currentTime = card.previewStart ?? 0;
-    vid.loop = false;
   }, [card.previewStart]);
 
   const handleMouseEnter = useCallback(() => {
@@ -58,8 +52,6 @@ function Card({
     if (!vid || !card.videoUrl) return;
 
     vid.currentTime = card.previewStart ?? 0;
-    vid.loop = false;
-
     vid.play().catch(() => {});
 
     if (timerRef.current) clearTimeout(timerRef.current);
@@ -69,22 +61,43 @@ function Card({
     }, 5000);
   }, [card.videoUrl, card.previewStart, resetVideo, mobile]);
 
+  const handleMouseLeave = useCallback(() => {
+    if (mobile) return;
+    resetVideo();
+  }, [resetVideo, mobile]);
+
   return (
     <div
-      className="relative overflow-hidden bg-[var(--deep-gray)] cursor-pointer transition-all duration-300"
+      className={`
+        relative overflow-hidden bg-[var(--deep-gray)]
+        cursor-pointer transition-all duration-500 group
+        ${card.large && !mobile ? "col-span-2" : ""}
+      `}
       onClick={() => onClick(card)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
+      {/* MEDIA */}
       <div
         className="relative overflow-hidden"
-        style={{ aspectRatio: mobile ? "4/5" : "4/3" }}
+        style={{
+          aspectRatio: mobile ? "4/5" : card.large ? "16/9" : "4/3",
+        }}
       >
+        {/* THUMBNAIL */}
         {card.thumbnailSrc && (
           <img
             src={card.thumbnailSrc}
-            className="absolute inset-0 w-full h-full object-cover"
+            alt={card.title}
+            className={`
+              absolute inset-0 w-full h-full object-cover
+              transition-all duration-500
+              ${mobile ? "" : "group-hover:opacity-0"}
+            `}
           />
         )}
 
+        {/* VIDEO PREVIEW */}
         {card.videoUrl && (
           <video
             ref={videoRef}
@@ -92,22 +105,24 @@ function Card({
             muted
             playsInline
             preload="metadata"
-            className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100"
+            className={`
+              absolute inset-0 w-full h-full object-cover
+              transition-all duration-500
+              ${mobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"}
+            `}
           />
         )}
 
-        {/* overlay */}
-        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 bg-black/40" />
 
-        {/* play */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-[50px] h-[50px] rounded-full bg-[var(--orange)] flex items-center justify-center">
+          <div className="w-[52px] h-[52px] rounded-full bg-[var(--orange)] flex items-center justify-center">
             <PlayIcon />
           </div>
         </div>
       </div>
 
-      {/* caption */}
+      {/* CAPTION */}
       <div className="p-3 md:p-5">
         <p className="text-[var(--cream)] text-sm md:text-base font-semibold">
           {card.title}
@@ -120,7 +135,47 @@ function Card({
   );
 }
 
-/* MAIN */
+/* ───────────────────────────────────────────── */
+/* MODAL (FULL VIDEO PLAYER ADDED) */
+/* ───────────────────────────────────────────── */
+function Modal({
+  card,
+  onClose,
+}: {
+  card: PortfolioCard;
+  onClose: () => void;
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-[3000] bg-black/95 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      {/* CLOSE BUTTON */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 md:top-6 md:right-6 z-[10] text-white text-sm uppercase tracking-[0.2em] px-3 py-2 border border-white/20 bg-black/40 backdrop-blur"
+      >
+        Close
+      </button>
+
+      <div
+        className="w-full max-w-[1200px] flex items-center justify-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <video
+          src={card.videoUrl}
+          controls
+          autoPlay
+          className="max-w-full max-h-[90vh] w-auto h-auto"
+        />
+      </div>
+    </div>
+  );
+}
+/* ───────────────────────────────────────────── */
+/* MAIN SECTION */
+/* ───────────────────────────────────────────── */
+
 export default function PortfolioSection() {
   const [activeFilter, setActiveFilter] =
     useState<PortfolioCategory | "all">("all");
@@ -128,7 +183,9 @@ export default function PortfolioSection() {
   const [modal, setModal] = useState<PortfolioCard | null>(null);
 
   const visible = PORTFOLIO_SECTIONS.filter(
-    (s) => activeFilter === "all" || s.category === activeFilter
+    (section) =>
+      activeFilter === "all" ||
+      section.category === activeFilter
   );
 
   return (
@@ -147,24 +204,32 @@ export default function PortfolioSection() {
         </h2>
 
         {/* FILTERS */}
-        <div className="flex gap-2 overflow-x-auto pb-5">
-          {FILTERS.map((f) => (
+        <div className="flex gap-2 overflow-x-auto py-6">
+          {[
+            { label: "All Work", value: "all" },
+            { label: "Video Editing", value: "editing" },
+            { label: "Videography", value: "videography" },
+            { label: "Cinematography", value: "cinematography" },
+            { label: "Animation", value: "animation" },
+            { label: "Event Recaps", value: "events" },
+            { label: "Creative Direction", value: "direction" },
+          ].map((filter) => (
             <button
-              key={f.value}
-              onClick={() => setActiveFilter(f.value)}
+              key={filter.value}
+              onClick={() => setActiveFilter(filter.value as any)}
               className="px-3 py-2 border text-[10px] uppercase whitespace-nowrap"
               style={{
                 background:
-                  activeFilter === f.value
+                  activeFilter === filter.value
                     ? "var(--orange)"
                     : "transparent",
                 color:
-                  activeFilter === f.value
+                  activeFilter === filter.value
                     ? "black"
                     : "var(--off-white)",
               }}
             >
-              {f.label}
+              {filter.label}
             </button>
           ))}
         </div>
@@ -172,28 +237,30 @@ export default function PortfolioSection() {
         {/* SECTIONS */}
         {visible.map((section) => (
           <div key={section.category} className="mb-14 md:mb-24">
-            <div className="mb-4 border-b border-white/10 pb-3">
-              <div className="flex justify-between items-center">
-                <span className="text-[var(--cream)] font-semibold">
-                  {section.name}
-                </span>
-                <span className="text-[var(--orange)] text-sm">
-                  {section.count}
-                </span>
-              </div>
+            <div className="flex justify-between mb-4 border-b border-white/10 pb-3">
+              <span className="text-[var(--cream)] font-semibold">
+                {section.name}
+              </span>
+              <span className="text-[var(--orange)] text-sm">
+                {section.count}
+              </span>
             </div>
 
             {/* MOBILE SWIPE */}
-            <div className="md:hidden flex gap-4 overflow-x-auto snap-x snap-mandatory">
+            <div className="md:hidden flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4">
               {section.cards.map((card) => (
                 <div key={card.id} className="min-w-[88%] snap-center">
-                  <Card card={{ ...card, large: false }} onClick={setModal} mobile />
+                  <Card
+                    card={{ ...card, large: false }}
+                    onClick={setModal}
+                    mobile
+                  />
                 </div>
               ))}
             </div>
 
             {/* DESKTOP */}
-            <div className="hidden md:grid grid-cols-3 gap-4">
+            <div className="hidden md:grid grid-cols-3 gap-4 items-start">
               {section.cards.map((card) => (
                 <Card key={card.id} card={card} onClick={setModal} />
               ))}
@@ -202,7 +269,8 @@ export default function PortfolioSection() {
         ))}
       </section>
 
-      {modal && <div />}
+      {/* FULL VIDEO MODAL */}
+      {modal && <Modal card={modal} onClose={() => setModal(null)} />}
     </>
   );
 }
