@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   PORTFOLIO_SECTIONS,
   PortfolioCategory,
@@ -44,7 +44,7 @@ function Card({
 
     let interval: ReturnType<typeof setInterval>;
 
-    const startLoop = async () => {
+    const run = async () => {
       try {
         vid.currentTime = start;
         await vid.play();
@@ -52,13 +52,12 @@ function Card({
 
       interval = setInterval(() => {
         if (!videoRef.current) return;
-
         videoRef.current.currentTime = start;
         videoRef.current.play().catch(() => {});
       }, PREVIEW_DURATION);
     };
 
-    startLoop();
+    run();
 
     return () => {
       if (interval) clearInterval(interval);
@@ -67,11 +66,14 @@ function Card({
 
   return (
     <div
-      className={`
-        relative overflow-hidden bg-[var(--deep-gray)]
-        cursor-pointer transition-all duration-500 group
-        ${card.large && !mobile ? "col-span-2" : ""}
-      `}
+      className="
+        relative overflow-hidden cursor-pointer group
+        bg-[var(--deep-gray)]
+        rounded-[8px]
+        shadow-[0_0_0_1px_rgba(255,255,255,0.06)]
+        transition-transform duration-300
+        hover:scale-[1.01]
+      "
       onClick={() => onClick(card)}
     >
       {/* MEDIA */}
@@ -81,20 +83,17 @@ function Card({
           aspectRatio: mobile ? "4/5" : card.large ? "16/9" : "4/3",
         }}
       >
-        {/* AUTO PLAY LOOPING VIDEO */}
-        {card.videoUrl && (
-          <video
-            ref={videoRef}
-            src={card.videoUrl}
-            muted
-            playsInline
-            preload="metadata"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        )}
+        <video
+          ref={videoRef}
+          src={card.videoUrl}
+          muted
+          playsInline
+          preload="metadata"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
 
         {/* OVERLAY */}
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-black/35" />
 
         {/* PLAY ICON */}
         <div className="absolute inset-0 flex items-center justify-center">
@@ -105,7 +104,7 @@ function Card({
       </div>
 
       {/* CAPTION */}
-      <div className="p-3 md:p-5">
+      <div className="p-4 md:p-6">
         <p className="text-[var(--cream)] text-sm md:text-base font-semibold">
           {card.title}
         </p>
@@ -118,7 +117,7 @@ function Card({
 }
 
 /* ───────────────────────────────────────────── */
-/* MODAL (FULL VIDEO) */
+/* MODAL */
 /* ───────────────────────────────────────────── */
 
 function Modal({
@@ -135,20 +134,20 @@ function Modal({
     >
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 md:top-6 md:right-6 text-white text-xs uppercase tracking-[0.25em] px-3 py-2 border border-white/20 bg-black/40 backdrop-blur"
+        className="absolute top-5 right-5 md:top-8 md:right-8 text-white text-xs uppercase tracking-[0.25em] px-3 py-2 border border-white/20 bg-black/40 backdrop-blur"
       >
         Close
       </button>
 
       <div
-        className="w-full max-w-[1200px] flex items-center justify-center"
+        className="w-full max-w-[1200px]"
         onClick={(e) => e.stopPropagation()}
       >
         <video
           src={card.videoUrl}
           controls
           autoPlay
-          className="max-w-full max-h-[90vh] w-auto h-auto"
+          className="max-w-full max-h-[90vh] w-auto h-auto mx-auto"
         />
       </div>
     </div>
@@ -156,7 +155,7 @@ function Modal({
 }
 
 /* ───────────────────────────────────────────── */
-/* MAIN SECTION */
+/* MAIN SECTION (CLEAN SPACING FIX) */
 /* ───────────────────────────────────────────── */
 
 export default function PortfolioSection() {
@@ -173,24 +172,23 @@ export default function PortfolioSection() {
 
   return (
     <>
-      <section className="bg-[var(--black)] px-4 md:px-[6vw] py-12 md:py-28">
+      <section className="bg-[var(--black)] px-4 md:px-[6vw] py-16 md:py-28">
         {/* HEADER */}
-        <div className="flex items-center gap-3 mb-2">
-          <span className="w-6 md:w-8 h-px bg-[var(--orange)]" />
-          <span className="text-[11px] tracking-[0.4em] uppercase text-[var(--orange)] font-medium">
+        <div className="flex items-center gap-3 mb-3">
+          <span className="w-8 h-px bg-[var(--orange)]" />
+          <span className="text-[11px] tracking-[0.45em] uppercase text-[var(--orange)] font-medium">
             Portfolio
           </span>
         </div>
 
         <h2
-          className="mb-6"
+          className="mb-10"
           style={{
             fontFamily: "var(--font-display)",
-            fontSize: "clamp(2.2rem,6vw,5.2rem)",
+            fontSize: "clamp(2.2rem,6vw,5.5rem)",
             letterSpacing: "-0.02em",
             lineHeight: 0.95,
             color: "var(--cream)",
-            fontWeight: 600,
           }}
         >
           SELECTED WORK
@@ -210,11 +208,9 @@ export default function PortfolioSection() {
             <button
               key={filter.value}
               onClick={() => setActiveFilter(filter.value as any)}
-              className="px-3 py-2 border text-[10px] uppercase whitespace-nowrap tracking-[0.2em]"
+              className="px-3 py-2 border text-[10px] uppercase tracking-[0.25em] whitespace-nowrap"
               style={{
                 fontFamily: "var(--font-head)",
-                fontWeight: 600,
-                letterSpacing: "0.18em",
                 background:
                   activeFilter === filter.value
                     ? "var(--orange)"
@@ -223,7 +219,7 @@ export default function PortfolioSection() {
                   activeFilter === filter.value
                     ? "black"
                     : "var(--off-white)",
-                borderColor: "rgba(255,255,255,0.1)",
+                borderColor: "rgba(255,255,255,0.12)",
               }}
             >
               {filter.label}
@@ -233,11 +229,16 @@ export default function PortfolioSection() {
 
         {/* SECTIONS */}
         {visible.map((section) => (
-          <div key={section.category} className="mb-14 md:mb-24">
-            <div className="flex justify-between mb-4 border-b border-white/10 pb-3">
-              <span className="text-[var(--cream)] font-semibold">
+          <div
+            key={section.category}
+            className="mb-24 md:mb-32 px-2 md:px-6"
+          >
+            {/* HEADER */}
+            <div className="flex justify-between items-end mb-8 border-b border-white/10 pb-4">
+              <span className="text-[var(--cream)] text-lg font-semibold">
                 {section.name}
               </span>
+
               <span className="text-[var(--orange)] text-sm">
                 {section.count}
               </span>
@@ -253,7 +254,7 @@ export default function PortfolioSection() {
             </div>
 
             {/* DESKTOP */}
-            <div className="hidden md:grid grid-cols-3 gap-4">
+            <div className="hidden md:grid grid-cols-3 gap-5 items-start">
               {section.cards.map((card) => (
                 <Card key={card.id} card={card} onClick={setModal} />
               ))}
