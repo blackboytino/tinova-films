@@ -127,7 +127,7 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
     count: "04",
     subs: ["Motion Graphics", "Data Viz", "Explainer", "Brand"],
     cards: [
-      { id: "anim-1", title: "Finance Timeline", sub: "2D motion", large: true, pattern: 4, videoUrl: "/assets/Innovation.mp4",
+      { id: "anim-1", title: "Finance Timeline", sub: "2D motion", large: true, pattern: 4, videoUrl: "https://res.cloudinary.com/dhbt8jcpg/video/upload/v1778633593/innovation_omo_mj4cyp.mov",
         thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618772/fin_thumbnail_zxb9kc.jpg",
         previewStart: 52 },
     ],
