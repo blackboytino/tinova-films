@@ -13,7 +13,8 @@ export async function POST(req) {
         });
 
         await transporter.sendMail({
-            from: email,
+            from: process.env.EMAIL_USER,
+            replyTo: email,
             to: process.env.EMAIL_USER,
             subject: `New Contact Message from ${name}`,
             html: `
@@ -25,8 +26,13 @@ export async function POST(req) {
       `,
         });
 
-        return Response.json({ success: true });
+        return Response.json({
+            success: true,
+        }, { status: 200 });
     } catch (err) {
-        return Response.json({ success: false, error: err.message });
+        return Response.json({
+            success: false,
+            error: err.message,
+        }, { status: 500 });
     }
 }
