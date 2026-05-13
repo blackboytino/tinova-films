@@ -149,7 +149,7 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
         thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618845/pm_thumbnail_m11fop.jpg",
         previewStart: 5,
       },
-      { id: "ev-2", title: "DJ Performance Recap", sub: "Energetic", pattern: 2, videoUrl: "https://res.cloudinary.com/dhbt8jcpg/video/upload/v1778690886/recap_vt4sle.mov" },
+      { id: "ev-2", title: "DJ Performance Recap", sub: "Energetic", pattern: 2, videoUrl: "https://res.cloudinary.com/dhbt8jcpg/video/upload/v1778690886/recap_vt4sle.mov", previewStart: 2 },
     ],
   },
   {
