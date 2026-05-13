@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   PORTFOLIO_SECTIONS,
   PortfolioCategory,
@@ -20,7 +20,7 @@ function PlayIcon() {
 }
 
 /* ───────────────────────────────────────────── */
-/* CARD (UNCHANGED LOGIC) */
+/* CARD (AUTO LOOP PREVIEW) */
 /* ───────────────────────────────────────────── */
 
 function Card({
@@ -33,38 +33,37 @@ function Card({
   mobile?: boolean;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const resetVideo = useCallback(() => {
-    const vid = videoRef.current;
-    if (!vid) return;
+  const PREVIEW_DURATION = 3000;
 
-    if (timerRef.current) clearTimeout(timerRef.current);
-
-    vid.pause();
-    vid.currentTime = card.previewStart ?? 0;
-  }, [card.previewStart]);
-
-  const handleMouseEnter = useCallback(() => {
-    if (mobile) return;
-
+  useEffect(() => {
     const vid = videoRef.current;
     if (!vid || !card.videoUrl) return;
 
-    vid.currentTime = card.previewStart ?? 0;
-    vid.play().catch(() => {});
+    const start = card.previewStart ?? 0;
 
-    if (timerRef.current) clearTimeout(timerRef.current);
+    let interval: ReturnType<typeof setInterval>;
 
-    timerRef.current = setTimeout(() => {
-      resetVideo();
-    }, 5000);
-  }, [card.videoUrl, card.previewStart, resetVideo, mobile]);
+    const startLoop = async () => {
+      try {
+        vid.currentTime = start;
+        await vid.play();
+      } catch {}
 
-  const handleMouseLeave = useCallback(() => {
-    if (mobile) return;
-    resetVideo();
-  }, [resetVideo, mobile]);
+      interval = setInterval(() => {
+        if (!videoRef.current) return;
+
+        videoRef.current.currentTime = start;
+        videoRef.current.play().catch(() => {});
+      }, PREVIEW_DURATION);
+    };
+
+    startLoop();
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [card.previewStart, card.videoUrl]);
 
   return (
     <div
@@ -74,8 +73,6 @@ function Card({
         ${card.large && !mobile ? "col-span-2" : ""}
       `}
       onClick={() => onClick(card)}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
       {/* MEDIA */}
       <div
@@ -84,20 +81,7 @@ function Card({
           aspectRatio: mobile ? "4/5" : card.large ? "16/9" : "4/3",
         }}
       >
-        {/* THUMBNAIL */}
-        {card.thumbnailSrc && (
-          <img
-            src={card.thumbnailSrc}
-            alt={card.title}
-            className={`
-              absolute inset-0 w-full h-full object-cover
-              transition-all duration-500
-              ${mobile ? "" : "group-hover:opacity-0"}
-            `}
-          />
-        )}
-
-        {/* VIDEO PREVIEW */}
+        {/* AUTO PLAY LOOPING VIDEO */}
         {card.videoUrl && (
           <video
             ref={videoRef}
@@ -105,16 +89,14 @@ function Card({
             muted
             playsInline
             preload="metadata"
-            className={`
-              absolute inset-0 w-full h-full object-cover
-              transition-all duration-500
-              ${mobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"}
-            `}
+            className="absolute inset-0 w-full h-full object-cover"
           />
         )}
 
+        {/* OVERLAY */}
         <div className="absolute inset-0 bg-black/40" />
 
+        {/* PLAY ICON */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="w-[52px] h-[52px] rounded-full bg-[var(--orange)] flex items-center justify-center">
             <PlayIcon />
@@ -136,8 +118,9 @@ function Card({
 }
 
 /* ───────────────────────────────────────────── */
-/* MODAL (FULL VIDEO PLAYER ADDED) */
+/* MODAL (FULL VIDEO) */
 /* ───────────────────────────────────────────── */
+
 function Modal({
   card,
   onClose,
@@ -150,10 +133,9 @@ function Modal({
       className="fixed inset-0 z-[3000] bg-black/95 flex items-center justify-center p-4"
       onClick={onClose}
     >
-      {/* CLOSE BUTTON */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 md:top-6 md:right-6 z-[10] text-white text-sm uppercase tracking-[0.2em] px-3 py-2 border border-white/20 bg-black/40 backdrop-blur"
+        className="absolute top-4 right-4 md:top-6 md:right-6 text-white text-xs uppercase tracking-[0.25em] px-3 py-2 border border-white/20 bg-black/40 backdrop-blur"
       >
         Close
       </button>
@@ -172,6 +154,7 @@ function Modal({
     </div>
   );
 }
+
 /* ───────────────────────────────────────────── */
 /* MAIN SECTION */
 /* ───────────────────────────────────────────── */
@@ -194,12 +177,22 @@ export default function PortfolioSection() {
         {/* HEADER */}
         <div className="flex items-center gap-3 mb-2">
           <span className="w-6 md:w-8 h-px bg-[var(--orange)]" />
-          <span className="text-[11px] tracking-[0.35em] uppercase text-[var(--orange)]">
+          <span className="text-[11px] tracking-[0.4em] uppercase text-[var(--orange)] font-medium">
             Portfolio
           </span>
         </div>
 
-        <h2 className="text-[2rem] md:text-[5rem] text-[var(--cream)] leading-none mb-6">
+        <h2
+          className="mb-6"
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "clamp(2.2rem,6vw,5.2rem)",
+            letterSpacing: "-0.02em",
+            lineHeight: 0.95,
+            color: "var(--cream)",
+            fontWeight: 600,
+          }}
+        >
           SELECTED WORK
         </h2>
 
@@ -217,8 +210,11 @@ export default function PortfolioSection() {
             <button
               key={filter.value}
               onClick={() => setActiveFilter(filter.value as any)}
-              className="px-3 py-2 border text-[10px] uppercase whitespace-nowrap"
+              className="px-3 py-2 border text-[10px] uppercase whitespace-nowrap tracking-[0.2em]"
               style={{
+                fontFamily: "var(--font-head)",
+                fontWeight: 600,
+                letterSpacing: "0.18em",
                 background:
                   activeFilter === filter.value
                     ? "var(--orange)"
@@ -227,6 +223,7 @@ export default function PortfolioSection() {
                   activeFilter === filter.value
                     ? "black"
                     : "var(--off-white)",
+                borderColor: "rgba(255,255,255,0.1)",
               }}
             >
               {filter.label}
@@ -246,21 +243,17 @@ export default function PortfolioSection() {
               </span>
             </div>
 
-            {/* MOBILE SWIPE */}
+            {/* MOBILE */}
             <div className="md:hidden flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4">
               {section.cards.map((card) => (
                 <div key={card.id} className="min-w-[88%] snap-center">
-                  <Card
-                    card={{ ...card, large: false }}
-                    onClick={setModal}
-                    mobile
-                  />
+                  <Card card={{ ...card, large: false }} onClick={setModal} mobile />
                 </div>
               ))}
             </div>
 
             {/* DESKTOP */}
-            <div className="hidden md:grid grid-cols-3 gap-4 items-start">
+            <div className="hidden md:grid grid-cols-3 gap-4">
               {section.cards.map((card) => (
                 <Card key={card.id} card={card} onClick={setModal} />
               ))}
@@ -269,7 +262,7 @@ export default function PortfolioSection() {
         ))}
       </section>
 
-      {/* FULL VIDEO MODAL */}
+      {/* MODAL */}
       {modal && <Modal card={modal} onClose={() => setModal(null)} />}
     </>
   );
