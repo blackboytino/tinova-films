@@ -1,3 +1,5 @@
+"use client";
+
 import { SERVICES } from "@/data/site";
 
 function ServiceIcon({ icon }: { icon: string }) {
@@ -16,16 +18,17 @@ function ServiceIcon({ icon }: { icon: string }) {
     film: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1} className="w-full h-full">
         <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
-        <line x1="7" y1="2" x2="7" y2="22" /><line x1="17" y1="2" x2="17" y2="22" />
-        <line x1="2" y1="12" x2="22" y2="12" /><line x1="2" y1="7" x2="7" y2="7" />
-        <line x1="2" y1="17" x2="7" y2="17" /><line x1="17" y1="17" x2="22" y2="17" />
-        <line x1="17" y1="7" x2="22" y2="7" />
+        <line x1="7" y1="2" x2="7" y2="22" />
+        <line x1="17" y1="2" x2="17" y2="22" />
+        <line x1="2" y1="12" x2="22" y2="12" />
       </svg>
     ),
     chart: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1} className="w-full h-full">
-        <line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" />
-        <line x1="6" y1="20" x2="6" y2="14" /><line x1="2" y1="20" x2="22" y2="20" />
+        <line x1="18" y1="20" x2="18" y2="10" />
+        <line x1="12" y1="20" x2="12" y2="4" />
+        <line x1="6" y1="20" x2="6" y2="14" />
+        <line x1="2" y1="20" x2="22" y2="20" />
       </svg>
     ),
     zap: (
@@ -40,59 +43,71 @@ function ServiceIcon({ icon }: { icon: string }) {
       </svg>
     ),
   };
+
   return icons[icon] ?? null;
 }
 
+/* ================= COMPONENT ================= */
+
 export default function ServicesSection() {
   return (
-    <section id="services" className="px-[8vw] py-[120px]" style={{ background: "var(--charcoal)" }}>
-      {/* Label */}
-      <div
-        className="reveal flex items-center gap-3 mb-4"
-        style={{
-          fontFamily: "var(--font-head)",
-          fontSize: "0.7rem",
-          letterSpacing: "0.4em",
-          textTransform: "uppercase",
-          color: "var(--orange)",
-        }}
-      >
-        <span className="block w-8 h-px" style={{ background: "var(--orange)" }} />
-        Services
+    <section
+      id="services"
+      className="px-4 md:px-[8vw] py-20 md:py-[120px]"
+      style={{ background: "var(--charcoal)" }}
+    >
+      {/* LABEL */}
+      <div className="flex items-center gap-3 mb-4">
+        <span className="w-8 h-px bg-[var(--orange)]" />
+        <span
+          className="text-[11px] tracking-[0.4em] uppercase text-[var(--orange)]"
+          style={{ fontFamily: "var(--font-head)" }}
+        >
+          Services
+        </span>
       </div>
+
+      {/* TITLE */}
       <h2
-        className="reveal"
+        className="mb-10 md:mb-16"
         style={{
           fontFamily: "var(--font-display)",
-          fontSize: "clamp(2.5rem, 5vw, 5rem)",
+          fontSize: "clamp(2.2rem, 5vw, 5rem)",
           lineHeight: 0.95,
-          letterSpacing: "0.02em",
           color: "var(--cream)",
-          marginBottom: 20,
         }}
       >
-        WHAT I
-        <br />
+        WHAT I <br />
         <span style={{ color: "var(--orange)" }}>BRING</span>
       </h2>
 
-      {/* Grid */}
+      {/* GRID (FIXED RESPONSIVE BEHAVIOR) */}
       <div
-        className="grid gap-[2px] mt-16"
-        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))" }}
+        className="
+          grid
+          gap-3 md:gap-[2px]
+          mt-10 md:mt-16
+          grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
+        "
       >
         {SERVICES.map((service) => (
           <div
             key={service.num}
-            className="service-card-bar relative overflow-hidden p-10 transition-all duration-400 hover:-translate-y-1 group"
+            className="
+              relative overflow-hidden
+              p-6 md:p-10
+              transition-all duration-300
+              hover:-translate-y-1
+              group
+            "
             style={{ background: "var(--deep-gray)" }}
           >
-            {/* Large number */}
+            {/* NUMBER */}
             <div
-              className="leading-none mb-5"
+              className="mb-4 md:mb-5 leading-none"
               style={{
                 fontFamily: "var(--font-display)",
-                fontSize: "3.5rem",
+                fontSize: "clamp(2.2rem, 5vw, 3.5rem)",
                 color: "rgba(255,255,255,0.04)",
                 letterSpacing: "-0.02em",
               }}
@@ -100,17 +115,17 @@ export default function ServicesSection() {
               {service.num}
             </div>
 
-            {/* Icon */}
-            <div className="w-12 h-12 mb-5" style={{ color: "var(--orange)" }}>
+            {/* ICON */}
+            <div className="w-10 h-10 md:w-12 md:h-12 mb-4 text-[var(--orange)]">
               <ServiceIcon icon={service.icon} />
             </div>
 
-            {/* Name */}
+            {/* TITLE */}
             <h3
-              className="mb-3"
+              className="mb-2 md:mb-3"
               style={{
                 fontFamily: "var(--font-head)",
-                fontSize: "1.15rem",
+                fontSize: "1.05rem",
                 fontWeight: 700,
                 color: "var(--cream)",
               }}
@@ -118,20 +133,31 @@ export default function ServicesSection() {
               {service.name}
             </h3>
 
-            {/* Desc */}
+            {/* DESC */}
             <p
-              className="mb-5"
-              style={{ fontSize: "0.9rem", color: "var(--off-white)", lineHeight: 1.7, fontWeight: 300 }}
+              className="mb-4 md:mb-5"
+              style={{
+                fontSize: "0.9rem",
+                color: "var(--off-white)",
+                lineHeight: 1.7,
+                fontWeight: 300,
+              }}
             >
               {service.desc}
             </p>
 
-            {/* Tags */}
+            {/* TAGS */}
             <div className="flex flex-wrap gap-1.5">
               {service.items.map((item) => (
                 <span
                   key={item}
-                  className="px-2 py-0.5 text-[0.65rem] tracking-[0.1em] uppercase border rounded-[2px]"
+                  className="
+                    px-2 py-0.5
+                    text-[0.65rem]
+                    tracking-[0.1em]
+                    uppercase
+                    border rounded-[2px]
+                  "
                   style={{
                     fontFamily: "var(--font-head)",
                     color: "var(--dim-text)",
@@ -143,9 +169,14 @@ export default function ServicesSection() {
               ))}
             </div>
 
-            {/* Hover background tint */}
+            {/* HOVER TINT */}
             <div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400 pointer-events-none"
+              className="
+                absolute inset-0
+                opacity-0 group-hover:opacity-100
+                transition-opacity duration-300
+                pointer-events-none
+              "
               style={{ background: "rgba(255,255,255,0.02)" }}
             />
           </div>

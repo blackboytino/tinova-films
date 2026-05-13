@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { CONTACT_DETAILS, SOCIAL_LINKS } from "@/data/site";
 
-/* ================= ICONS ================= */
+/* ================= ICONS (UNCHANGED) ================= */
 
 function InstagramIcon() {
   return (
@@ -63,8 +63,6 @@ function MapPinIcon() {
   );
 }
 
-/* ================= ICON MAP ================= */
-
 const iconMap: Record<string, React.ReactNode> = {
   mail: <MailIcon />,
   phone: <PhoneIcon />,
@@ -86,63 +84,65 @@ export default function ContactSection() {
     message: "",
   });
 
- const handleSubmit = async () => {
-  try {
-    setSubmitted(true);
+  const handleSubmit = async () => {
+    try {
+      setSubmitted(true);
 
-    await fetch("/api/contact", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-    });
+      await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    setForm({ name: "", email: "", service: "", message: "" });
+      setForm({ name: "", email: "", service: "", message: "" });
 
-    setTimeout(() => setSubmitted(false), 3000);
-  } catch (err) {
-    console.error(err);
-    setSubmitted(false);
-  }
-};
+      setTimeout(() => setSubmitted(false), 3000);
+    } catch (err) {
+      console.error(err);
+      setSubmitted(false);
+    }
+  };
 
   return (
-    <section id="contact" className="px-[8vw] py-[120px]" style={{ background: "var(--black)" }}>
-      
+    <section
+      id="contact"
+      className="
+        px-4 md:px-[8vw]
+        py-20 md:py-[120px]
+        bg-[var(--black)]
+      "
+    >
       {/* LABEL */}
-      <div
-        className="flex items-center gap-3 mb-4"
-        style={{
-          fontFamily: "var(--font-head)",
-          fontSize: "0.7rem",
-          letterSpacing: "0.4em",
-          textTransform: "uppercase",
-          color: "var(--orange)",
-        }}
-      >
-        <span className="block w-8 h-px" style={{ background: "var(--orange)" }} />
-        Contact
+      <div className="flex items-center gap-3 mb-4">
+        <span className="w-8 h-px bg-[var(--orange)]" />
+        <span
+          className="text-[11px] tracking-[0.4em] uppercase text-[var(--orange)]"
+          style={{ fontFamily: "var(--font-head)" }}
+        >
+          Contact
+        </span>
       </div>
 
+      {/* TITLE */}
       <h2
+        className="mb-10 md:mb-16"
         style={{
           fontFamily: "var(--font-display)",
-          fontSize: "clamp(2.5rem, 5vw, 5rem)",
+          fontSize: "clamp(2.2rem, 5vw, 5rem)",
           lineHeight: 0.95,
           color: "var(--cream)",
-          marginBottom: 20,
         }}
       >
         LET&apos;S CREATE <br />
         <span style={{ color: "var(--orange)" }}>TOGETHER</span>
       </h2>
 
-      <div className="grid gap-[80px] mt-16" style={{ gridTemplateColumns: "1fr 1fr" }}>
+      {/* GRID (FIXED RESPONSIVENESS) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-[80px]">
         
         {/* LEFT */}
         <div>
-          <p style={{ color: "var(--off-white)", lineHeight: 1.8, marginBottom: 40 }}>
+          <p className="text-[var(--off-white)] leading-relaxed mb-10">
             Ready to bring your vision to life? Let’s talk.
           </p>
 
@@ -150,13 +150,13 @@ export default function ContactSection() {
           <div className="flex flex-col gap-4 mb-10">
             {CONTACT_DETAILS.map((detail) => (
               <div key={detail.label} className="flex items-center gap-4">
-                <div
-                  className="w-10 h-10 flex items-center justify-center"
-                  style={{ background: "var(--deep-gray)", color: "var(--orange)" }}
-                >
+                <div className="w-10 h-10 flex items-center justify-center bg-[var(--deep-gray)] text-[var(--orange)]">
                   {iconMap[detail.icon]}
                 </div>
-                <a href={detail.href} style={{ color: "var(--off-white)" }}>
+                <a
+                  href={detail.href}
+                  className="text-[var(--off-white)] text-sm md:text-base"
+                >
                   {detail.value}
                 </a>
               </div>
@@ -164,18 +164,20 @@ export default function ContactSection() {
           </div>
 
           {/* SOCIALS */}
-          <div className="flex gap-3">
+          <div className="flex gap-3 flex-wrap">
             {SOCIAL_LINKS.map((social) => (
               <a
                 key={social.platform}
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 flex items-center justify-center border rounded-[2px]"
-                style={{
-                  borderColor: "rgba(255,255,255,0.1)",
-                  color: "var(--off-white)",
-                }}
+                className="
+                  w-10 h-10
+                  flex items-center justify-center
+                  border border-white/10
+                  rounded-[4px]
+                "
+                style={{ color: "var(--off-white)" }}
               >
                 {iconMap[social.platform]}
               </a>
@@ -183,26 +185,26 @@ export default function ContactSection() {
           </div>
         </div>
 
-        {/* RIGHT */}
-        <div>
+        {/* RIGHT (FORM) */}
+        <div className="space-y-4">
           <input
             placeholder="Name"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
-            className="form-input-custom mb-4"
+            className="form-input-custom"
           />
 
           <input
             placeholder="Email"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
-            className="form-input-custom mb-4"
+            className="form-input-custom"
           />
 
           <select
             value={form.service}
             onChange={(e) => setForm({ ...form, service: e.target.value })}
-            className="form-input-custom mb-4"
+            className="form-input-custom"
           >
             <option value="">Select service</option>
             <option>Video Editing</option>
@@ -214,13 +216,13 @@ export default function ContactSection() {
             placeholder="Message"
             value={form.message}
             onChange={(e) => setForm({ ...form, message: e.target.value })}
-            className="form-input-custom mb-6"
+            className="form-input-custom"
             style={{ minHeight: 140 }}
           />
 
           <button
             onClick={handleSubmit}
-            className="w-full py-4"
+            className="w-full py-4 mt-2"
             style={{
               background: submitted ? "#2e7d32" : "var(--orange)",
               color: "black",
