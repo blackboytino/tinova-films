@@ -147,7 +147,7 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
         pattern: 1,
          videoUrl: "https://res.cloudinary.com/dhbt8jcpg/video/upload/v1778624970/pm2am-compressed-compressed_mckzcn.mov",
         thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618845/pm_thumbnail_m11fop.jpg",
-        previewStart: 5,
+        previewStart: 8,
       },
       { id: "ev-2", title: "DJ Performance Recap", sub: "Energetic", pattern: 2, videoUrl: "https://res.cloudinary.com/dhbt8jcpg/video/upload/v1778690886/recap_vt4sle.mov", previewStart: 2 },
     ],
