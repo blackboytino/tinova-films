@@ -1,11 +1,33 @@
 "use client";
 
 import { HERO_STATS } from "@/data/site";
+import { useRef, useState } from "react";
 
 export default function HeroSection() {
+  const [playing, setPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
   const scrollTo = (href: string) => {
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const handlePlayReel = async () => {
+    if (!videoRef.current) return;
+
+    setPlaying(true);
+
+    try {
+      videoRef.current.currentTime = 0;
+      await videoRef.current.play();
+    } catch (err) {
+      console.error(err);
+      setPlaying(false);
+    }
+  };
+
+  const handleVideoEnd = () => {
+    setPlaying(false);
   };
 
   return (
@@ -13,9 +35,24 @@ export default function HeroSection() {
       id="hero"
       className="relative min-h-screen flex flex-col justify-center items-start px-[8vw] overflow-hidden"
     >
+      {/* VIDEO */}
+      <video
+        ref={videoRef}
+        onEnded={handleVideoEnd}
+        playsInline
+        preload="auto"
+        className={`absolute inset-0 w-full h-full object-cover z-[1] transition-opacity duration-700 ${
+          playing ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+      >
+        <source src="/videos/showreel.mp4" type="video/mp4" />
+      </video>
+
       {/* Background */}
       <div
-        className="hero-bg absolute inset-0 z-0"
+        className={`hero-bg absolute inset-0 z-0 transition-all duration-700 ${
+          playing ? "opacity-0 scale-105" : "opacity-100 scale-100"
+        }`}
         style={{
           background: `
             radial-gradient(ellipse 80% 60% at 70% 50%, rgba(28,42,58,0.6) 0%, transparent 70%),
@@ -25,8 +62,13 @@ export default function HeroSection() {
           `,
         }}
       />
+
       {/* Grid lines */}
-      <div className="hero-grid-lines absolute inset-0 z-[1] pointer-events-none" />
+      <div
+        className={`hero-grid-lines absolute inset-0 z-[1] pointer-events-none transition-opacity duration-700 ${
+          playing ? "opacity-0" : "opacity-100"
+        }`}
+      />
 
       {/* Content */}
       <div className="relative z-[2] max-w-[900px]">
@@ -41,7 +83,8 @@ export default function HeroSection() {
             color: "var(--orange)",
             opacity: 0,
             transform: "translateX(-20px)",
-            transition: "opacity 0.8s 0.2s var(--ease-out), transform 0.8s 0.2s var(--ease-out)",
+            transition:
+              "opacity 0.8s 0.2s var(--ease-out), transform 0.8s 0.2s var(--ease-out)",
           }}
         >
           Lagos · Nigeria · Available Worldwide
@@ -58,7 +101,8 @@ export default function HeroSection() {
             color: "var(--cream)",
             opacity: 0,
             transform: "translateY(40px)",
-            transition: "opacity 0.9s 0.4s var(--ease-out), transform 0.9s 0.4s var(--ease-out)",
+            transition:
+              "opacity 0.9s 0.4s var(--ease-out), transform 0.9s 0.4s var(--ease-out)",
           }}
         >
           VISUAL
@@ -78,17 +122,21 @@ export default function HeroSection() {
             fontWeight: 300,
             opacity: 0,
             transform: "translateY(20px)",
-            transition: "opacity 0.8s 0.6s var(--ease-out), transform 0.8s 0.6s var(--ease-out)",
+            transition:
+              "opacity 0.8s 0.6s var(--ease-out), transform 0.8s 0.6s var(--ease-out)",
           }}
         >
-          I craft cinematic experiences that don&apos;t just show a moment — they make
-          you feel it. From live events to branded campaigns.
+          I craft cinematic experiences that don&apos;t just show a moment —
+          they make you feel it. From live events to branded campaigns.
         </p>
 
         {/* Actions */}
         <div
           className="hero-actions flex items-center gap-6 flex-wrap"
-          style={{ opacity: 0, transition: "opacity 0.8s 0.8s var(--ease-out)" }}
+          style={{
+            opacity: 0,
+            transition: "opacity 0.8s 0.8s var(--ease-out)",
+          }}
         >
           <button
             onClick={() => scrollTo("#portfolio")}
@@ -103,6 +151,7 @@ export default function HeroSection() {
           >
             View My Work
           </button>
+
           <button
             onClick={() => scrollTo("#contact")}
             className="flex items-center gap-2.5 bg-transparent border-0 transition-all duration-300 hover:gap-4 cursor-none group"
@@ -116,7 +165,9 @@ export default function HeroSection() {
             }}
           >
             Let&apos;s Talk{" "}
-            <span className="text-xl transition-all duration-300 group-hover:text-cream">→</span>
+            <span className="text-xl transition-all duration-300 group-hover:text-cream">
+              →
+            </span>
           </button>
         </div>
       </div>
@@ -124,7 +175,10 @@ export default function HeroSection() {
       {/* Stats */}
       <div
         className="hero-stats absolute right-[8vw] bottom-[15vh] flex flex-col gap-8 z-[2] lg:flex hidden"
-        style={{ opacity: 0, transition: "opacity 0.8s 1.2s var(--ease-out)" }}
+        style={{
+          opacity: 0,
+          transition: "opacity 0.8s 1.2s var(--ease-out)",
+        }}
       >
         {HERO_STATS.map((stat) => (
           <div key={stat.label} className="text-right">
@@ -139,6 +193,7 @@ export default function HeroSection() {
               <span style={{ color: "var(--orange)" }}>{stat.num}</span>
               {stat.suffix}
             </div>
+
             <div
               className="mt-1"
               style={{
@@ -158,7 +213,9 @@ export default function HeroSection() {
       <div className="absolute right-[8vw] top-1/2 -translate-y-1/2 w-[180px] h-[180px] z-[2] hidden xl:flex items-center justify-center">
         {/* Rotating ring SVG */}
         <div
-          className="absolute inset-0"
+          className={`absolute inset-0 transition-all duration-500 ${
+            playing ? "opacity-0 scale-75 rotate-180" : "opacity-100 scale-100"
+          }`}
           style={{ animation: "rotateSlow 12s linear infinite" }}
         >
           <svg viewBox="0 0 180 180" className="w-full h-full">
@@ -168,6 +225,7 @@ export default function HeroSection() {
                 d="M90,90 m-75,0 a75,75 0 1,1 150,0 a75,75 0 1,1 -150,0"
               />
             </defs>
+
             <text
               style={{
                 fill: "var(--orange)",
@@ -177,14 +235,20 @@ export default function HeroSection() {
               }}
             >
               <textPath href="#textCircle">
-                VISUAL · STORYTELLER · TINO · AKPOTU ·{" "}
+                VISUALIST · TINO · AKPOTU ·{" "}
               </textPath>
             </text>
           </svg>
         </div>
+
         {/* Center circle */}
-        <div
-          className="w-20 h-20 rounded-full flex items-center justify-center text-center transition-transform duration-400 hover:scale-110 cursor-none shadow-[0_0_40px_var(--orange-soft)]"
+        <button
+          onClick={handlePlayReel}
+          className={`w-20 h-20 rounded-full flex items-center justify-center text-center transition-all duration-500 shadow-[0_0_40px_var(--orange-soft)] ${
+            playing
+              ? "opacity-0 scale-50 rotate-180 pointer-events-none"
+              : "opacity-100 scale-100 rotate-0"
+          }`}
           style={{
             background: "var(--orange)",
             fontFamily: "var(--font-display)",
@@ -197,7 +261,7 @@ export default function HeroSection() {
           PLAY
           <br />
           REEL
-        </div>
+        </button>
       </div>
 
       {/* Scroll hint */}
@@ -208,10 +272,12 @@ export default function HeroSection() {
         <div
           className="w-px h-15"
           style={{
-            background: "linear-gradient(to bottom, var(--orange), transparent)",
+            background:
+              "linear-gradient(to bottom, var(--orange), transparent)",
             animation: "scrollPulse 2s ease-in-out infinite",
           }}
         />
+
         <span
           className="writing-vertical"
           style={{

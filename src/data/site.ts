@@ -230,15 +230,15 @@ export const CONTACT_DETAILS = [
 export const SOCIAL_LINKS = [
   {
     platform: "instagram",
-    href: "https://instagram.com/yourpage",
+    href: "https://instagram.com/tino.akpotu",
   },
   {
     platform: "twitter",
-    href: "https://twitter.com/yourpage",
+    href: "https://x.com/tino_akpotu",
   },
   {
     platform: "linkedin",
-    href: "https://linkedin.com/in/yourpage",
+    href: "https://linkedin.com/in/ogaga-akpotu",
   },
   {
    platform: "tiktok",
