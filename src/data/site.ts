@@ -115,7 +115,7 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
         featured: true,
         large: true,
         pattern: 1,
-         videoUrl: "https://res.cloudinary.com/dhbt8jcpg/video/upload/v1778628715/Ctrl_Z_-final_rxmcwa.mov",
+         videoUrl: "https://drive.google.com/file/d/1REp2flQtwVKnDUbyZ-EkLT3x8ylm8YiZ/view?usp=drivesdk",
         thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618867/z_thumbnail_sqo4ch.png",
         previewStart: 1,
       },
