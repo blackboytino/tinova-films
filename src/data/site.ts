@@ -127,7 +127,7 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
     count: "04",
     subs: ["Motion Graphics", "Data Viz", "Explainer", "Brand"],
     cards: [
-      { id: "anim-1", title: "Finance Timeline", sub: "2D motion", large: true, pattern: 4, videoUrl: "https://res.cloudinary.com/dhbt8jcpg/video/upload/v1778633593/innovation_omo_mj4cyp.mov",
+      { id: "anim-1", title: "Finance Timeline", sub: "2D motion", large: true, pattern: 4, videoUrl: "https://ik.imagekit.io/afdjudxv6/vcompress_1.MP4",
         thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618772/fin_thumbnail_zxb9kc.jpg",
         previewStart: 52 },
     ],
@@ -145,7 +145,7 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
         featured: true,
         large: true,
         pattern: 1,
-         videoUrl: "https://res.cloudinary.com/dhbt8jcpg/video/upload/v1778624970/pm2am-compressed-compressed_mckzcn.mov",
+         videoUrl: "https://ik.imagekit.io/afdjudxv6/pm2am-compressed.mov",
         thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618845/pm_thumbnail_m11fop.jpg",
         previewStart: 8,
       },
