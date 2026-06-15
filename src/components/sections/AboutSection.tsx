@@ -32,7 +32,7 @@ export default function AboutSection() {
               style={{ background: "var(--deep-gray)" }}
             >
               <img
-                src="https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618847/tinova_itrb1b.jpg"
+                src="https://ik.imagekit.io/afdjudxv6/tinova.JPG"
                 alt="Tino Akpotu"
                 className="w-full h-full object-cover opacity-90"
               />
