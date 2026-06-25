@@ -242,6 +242,6 @@ export const SOCIAL_LINKS = [
   },
   {
    platform: "tiktok",
-    href: "https://tiktok.com/tino.akpotu",  
+    href: "https://tiktok.com/@tino.akpotu",  
   }
 ] as const;
