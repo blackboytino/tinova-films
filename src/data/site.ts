@@ -69,10 +69,15 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
     subs: ["Fast-Paced", "Music Sync", "Cinematic", "Social"],
     cards: [
         {
-      id: "vg-3", title: "Product Showcase", sub: "Full day", pattern: 6,videoUrl: "https://ik.imagekit.io/afdjudxv6/Bubus.mov/ik-video.mp4?updatedAt=1780655943772",
+      id: "ve-1", title: "Product Showcase", sub: "Full day", pattern: 6,videoUrl: "https://ik.imagekit.io/afdjudxv6/Bubus.mov/ik-video.mp4?updatedAt=1780655943772",
+        thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618763/bubu_thumbnail_bo98bl.png",
+        previewStart: 1  
+  }, {
+      id: "ve-2", title: "FravionX Campaign", sub: "Full day", pattern: 6,videoUrl: "https://ik.imagekit.io/afdjudxv6/Bubus.mov/ik-video.mp4?updatedAt=1780655943772",
         thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618763/bubu_thumbnail_bo98bl.png",
         previewStart: 1  
   }
+
     ],
   },
   {
