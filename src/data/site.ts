@@ -73,9 +73,9 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
         thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618763/bubu_thumbnail_bo98bl.png",
         previewStart: 1  
   }, {
-      id: "ve-2", title: "FravionX Campaign", sub: "Full day", pattern: 6,videoUrl: "https://ik.imagekit.io/afdjudxv6/gym%20vid%202.mp4",
+      id: "ve-2", title: "FravionX Campaign", sub: "Full day", pattern: 6,videoUrl: "https://ckyqtnvmndjrmmqgmkzd.supabase.co/storage/v1/object/public/Portfolio%20Videos/Bubus.mov",
         thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618763/bubu_thumbnail_bo98bl.png",
-        previewStart: 1  
+        previewStart: 4
   }
 
     ],
@@ -146,7 +146,7 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
       {
         id: "ev-1",
         title: "PM2AM Party Recap",
-        sub: "3-day coverage · Highlight reel",
+        sub: "1-day coverage · Highlight reel",
         featured: true,
         large: true,
         pattern: 1,
