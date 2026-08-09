@@ -75,7 +75,7 @@ export const PORTFOLIO_SECTIONS: PortfolioSection[] = [
   }, {
       id: "ve-2", title: "FravionX Campaign", sub: "Full day", pattern: 6,videoUrl: "https://ckyqtnvmndjrmmqgmkzd.supabase.co/storage/v1/object/public/Portfolio%20Videos/gym%20vid%202.mp4",
         thumbnailSrc: "https://res.cloudinary.com/dhbt8jcpg/image/upload/v1778618763/bubu_thumbnail_bo98bl.png",
-        previewStart: 4
+        previewStart: 2
   }
 
     ],
